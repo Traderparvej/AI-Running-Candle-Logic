@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Running Candle Logic</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      color: #00695c;
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 121, 107, 0.3);
+      max-width: 480px;
+      width: 100%;
+      padding: 2rem 2.5rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00695c;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 1.75rem;
+      letter-spacing: 1.2px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 1rem 0 0.4rem;
+      color: #004d40;
+    }
+
+    input[type="password"],
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border: 1.8px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #f9f9f9;
+      color: #004d40;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    input[type="password"]:focus,
+    select:focus,
+    input[type="number"]:focus {
+      border-color: #00796b;
+      box-shadow: 0 0 8px #00796b88;
+      outline: none;
+      background-color: #fff;
+    }
+
+    /* --- Buttons --- */
+    button {
+      width: 100%;
+      padding: 0.7rem 0;
+      background-color: #00796b;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s ease;
+      letter-spacing: 0.05em;
+      box-shadow: 0 3px 8px #00796b99;
+    }
+    button:hover {
+      background-color: #004d40;
+      box-shadow: 0 4px 12px #004d4088;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .button-row button {
+      width: 32%;
+      padding: 0.7rem 0;
+      font-size: 1rem;
+      box-shadow: 0 3px 8px #00796b99;
+    }
+    .button-row button:hover {
+      background-color: #004d40;
+      box-shadow: 0 4px 12px #004d4088;
+    }
+
+    /* --- Output box --- */
+    #output {
+      white-space: pre-wrap;
+      margin-top: 2rem;
+      background: #ffffff;
+      padding: 1.25rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #004d40;
+      box-shadow: 0 0 12px #00796b55;
+      min-height: 150px;
+      line-height: 1.5;
+      user-select: text;
+      font-family: 'Courier New', Courier, monospace;
+      border: 2px solid #00796b;
+      letter-spacing: 0.03em;
+      overflow-wrap: break-word;
+    }
+
+    #mainPage {
+      display: none;
+    }
+
+    /* Checkbox container */
+    .checkbox-list {
+      border: 1.8px solid #ccc;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      max-height: 160px;
+      overflow-y: auto;
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #004d40;
+      letter-spacing: 0.02em;
+    }
+
+    .checkbox-list label {
+      display: block;
+      cursor: pointer;
+      padding: 3px 0;
+      font-size: 0.95rem;
+    }
+
+    .checkbox-list input[type="checkbox"] {
+      margin-right: 8px;
+      cursor: pointer;
+      transform: scale(1.1);
+      vertical-align: middle;
+    }
+
+    /* Link styling */
+    a.contact-link {
+      color: #00796b;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    a.contact-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div class="container" id="loginPage" role="main">
+    <h2>Login Required</h2>
+    <input type="password" id="password" placeholder="Enter password" aria-label="Password" />
+    <button onclick="login()">Login</button>
+    <p style="margin-top:1rem; font-size:0.9rem; color:#004d40; text-align:center;">
+      For password contact: <a href="https://t.me/QxParvej" target="_blank" class="contact-link">@QXParvej</a>
+    </p>
+  </div>
+
+  <!-- Main Signal Generator Page -->
+  <div class="container" id="mainPage" aria-live="polite" aria-label="AI Signal Generator Interface" role="main">
+    <h2>📊 AI Running Candle Logic</h2>
+
+    <label for="marketType">Select Market Type:</label>
+    <select id="marketType" onchange="updateAssets()" aria-required="true">
+      <option value="">-- Select Market --</option>
+      <option value="real">Real Market</option>
+      <option value="otc">OTC</option>
+    </select>
+
+    <label>Select Asset(s):</label>
+    <div id="assetCheckboxList" class="checkbox-list" aria-required="true" role="group" aria-label="Select Assets">
+      <!-- checkboxes will be dynamically injected here -->
+    </div>
+
+    <label for="timeframe">Select Timeframe:</label>
+    <select id="timeframe">
+      <option value="1">1 Minute</option>
+      <option value="3">3 Minute</option>
+      <option value="5">5 Minute</option>
+    </select>
+
+    <label for="signalCount">Number of Signals:</label>
+    <input type="number" id="signalCount" value="5" min="1" max="20" aria-required="true" />
+
+    <label for="chartType">Chart Type:</label>
+    <select id="chartType" aria-required="true">
+      <option value="ranging">Ranging Market</option>
+      <option value="trending">Trending Market</option>
+    </select>
+
+    <div class="button-row">
+      <button onclick="generateSignals()">Generate Signals</button>
+      <button onclick="copySignals()">Copy All</button>
+      <button onclick="resetForm()">Reset</button>
+    </div>
+
+    <div id="output" aria-label="Signal output will appear here"></div>
+  </div>
+
+<script>
+  const CORRECT_PASSWORD = "@Ai100";
+
+  const realAssets = [
+    "EUR/JPY", "USD/JPY", "CAD/JPY", "EUR/USD", "GBP/USD", "AUD/JPY",
+    "GBP/CAD", "USD/CAD", "AUD/CAD", "AUD/USD", "GBP/AUD", "GBP/JPY",
+    "USD/CHF", "EUR/GBP"
+  ];
+
+  const otcAssets = [
+    "USD/ARS (OTC)", "USD/BDT (OTC)", "USD/EGP (OTC)", "USD/INR (OTC)", "USD/IDR (OTC)",
+    "USD/MXN (OTC)", "EUR/AUD (OTC)", "EUR/CHF (OTC)", "EUR/SGD (OTC)", "GBP/CHF (OTC)",
+    "NZD/CAD (OTC)", "AUD/NZD (OTC)", "CAD/CHF (OTC)", "EUR/NZD (OTC)", "USD/PHP (OTC)",
+    "GBP/NZD (OTC)", "USD/BRL (OTC)", "USD/ZAR (OTC)", "EUR/CAD (OTC)", "AUD/CHF (OTC)",
+    "CHF/JPY (OTC)", "NZD/CHF (OTC)", "USD/COP (OTC)", "USD/DZD (OTC)", "USD/NGN (OTC)",
+    "USD/TRY (OTC)", "USD/PKR (OTC)", "NZD/JPY (OTC)", "NZD/USD (OTC)"
+  ];
+
+  function login() {
+    const inputPass = document.getElementById("password").value.trim();
+    if(inputPass === CORRECT_PASSWORD) {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("mainPage").style.display = "block";
+      updateAssets();
+      resetForm();
+    } else {
+      alert("Incorrect password!");
+    }
+  }
+
+  function updateAssets() {
+    const marketType = document.getElementById("marketType").value;
+    const container = document.getElementById("assetCheckboxList");
+    container.innerHTML = "";
+
+    if (!marketType) {
+      container.innerHTML = "<p style='color:#888; font-style:italic;'>Please select a market first.</p>";
+      return;
+    }
+
+    const assets = marketType === "otc" ? otcAssets : realAssets;
+
+    assets.forEach(asset => {
+      const id = "asset-" + asset.replace(/[^\w]/g, '_');
+      const label = document.createElement("label");
+      label.htmlFor = id;
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = id;
+      checkbox.name = "assets";
+      checkbox.value = asset;
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(asset));
+
+      container.appendChild(label);
+    });
+  }
+
+  function generateSignals() {
+    const count = parseInt(document.getElementById("signalCount").value);
+    const checkedBoxes = document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
+    if (checkedBoxes.length === 0) {
+      alert("Please select at least one asset!");
+      return;
+    }
+    const selectedAssets = Array.from(checkedBoxes).map(cb => cb.value);
+    const chartType = document.getElementById("chartType").value;
+
+    const strategy = chartType === "ranging"
+      ? "🧠 Opposite Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, তার বিপরীতে ট্রেড নিন ❤️"
+      : "🧠 Running Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, সেই দিকেই ট্রেড নিন ❤️";
+
+    const outputHeader = `♧ 𝗔𝗜 𝗦𝗜𝗚𝗡𝗔𝗟 – 1 𝗠𝗶𝗻𝘂𝘁𝗲 𝗧𝗿𝗮𝗱𝗲\n✘ 𝟭 𝗦𝘁𝗲𝗽 𝗠𝗧𝗚 | ⏰ 𝗨𝗧𝗖 +𝟬𝟲:𝟬𝟬 ✘\n\n╔════ ≪•◦ ❈ ◦•≫ ════╗\n${strategy}\n╚════ ≪•◦ ❈ ◦•≫ ════╝\n`;
+
+    const now = new Date();
+    const signals = [];
+
+    for (let i = 0; i < count; i++) {
+      // Random gap 2-5 minutes
+      const randomGap = Math.floor(Math.random() * 4) + 2;
+      now.setMinutes(now.getMinutes() + randomGap);
+
+      let hour = String(now.getHours()).padStart(2, '0');
+      let minute = String(now.getMinutes()).padStart(2, '0');
+
+      // Cycle through selected assets
+      const asset = selectedAssets[i % selectedAssets.length];
+
+      signals.push(`➤ ${hour}:${minute} – ${asset}`);
+    }
+
+    const output = `${outputHeader}\n${signals.join("\n")}\n\n🛡 Trade Smart. Stay Disciplined.`;
+    document.getElementById("output").textContent = output;
+  }
+
+  function copySignals() {
+    const outputElem = document.getElementById("output");
+    const text = outputElem.textContent.trim();
+    if (!text) {
+      alert("No signals to copy!");
+      return;
+    }
+    
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, 99999);
+
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        alert("Signals copied to clipboard!");
+      } else {
+        alert("Failed to copy. Please copy manually.");
+      }
+    } catch (err) {
+      alert("Error copying: " + err);
+    }
+    document.body.removeChild(textarea);
+  }
+
+  function resetForm() {
+    document.getElementById("marketType").value = "";
+    updateAssets();
+    document.getElementById("timeframe").value = "1";
+    document.getElementById("signalCount").value = 5;
+    document.getElementById("chartType").value = "ranging";
+    document.getElementById("output").textContent = "";
+  }
+</script>
+
+</body>
+</html>
