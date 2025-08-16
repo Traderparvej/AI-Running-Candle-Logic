@@ -219,7 +219,7 @@
   </div>
 
 <script>
-  const CORRECT_PASSWORD = "@Ai100";
+  const CORRECT_PASSWORD = "@Ai4067";
 
   const realAssets = [
     "EUR/JPY", "USD/JPY", "CAD/JPY", "EUR/USD", "GBP/USD", "AUD/JPY",
@@ -298,14 +298,12 @@
     const signals = [];
 
     for (let i = 0; i < count; i++) {
-      // Random gap 2-5 minutes
       const randomGap = Math.floor(Math.random() * 4) + 2;
       now.setMinutes(now.getMinutes() + randomGap);
 
       let hour = String(now.getHours()).padStart(2, '0');
       let minute = String(now.getMinutes()).padStart(2, '0');
 
-      // Cycle through selected assets
       const asset = selectedAssets[i % selectedAssets.length];
 
       signals.push(`➤ ${hour}:${minute} – ${asset}`);
