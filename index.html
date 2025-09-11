@@ -66,7 +66,6 @@
       background-color: #fff;
     }
 
-    /* --- Buttons --- */
     button {
       width: 100%;
       padding: 0.7rem 0;
@@ -104,7 +103,6 @@
       box-shadow: 0 4px 12px #004d4088;
     }
 
-    /* --- Output box --- */
     #output {
       white-space: pre-wrap;
       margin-top: 2rem;
@@ -127,7 +125,6 @@
       display: none;
     }
 
-    /* Checkbox container */
     .checkbox-list {
       border: 1.8px solid #ccc;
       border-radius: 8px;
@@ -154,7 +151,6 @@
       vertical-align: middle;
     }
 
-    /* Link styling */
     a.contact-link {
       color: #00796b;
       font-weight: 700;
@@ -167,7 +163,6 @@
 </head>
 <body>
 
-  <!-- Login Page -->
   <div class="container" id="loginPage" role="main">
     <h2>Login Required</h2>
     <input type="password" id="password" placeholder="Enter password" aria-label="Password" />
@@ -177,7 +172,6 @@
     </p>
   </div>
 
-  <!-- Main Signal Generator Page -->
   <div class="container" id="mainPage" aria-live="polite" aria-label="AI Signal Generator Interface" role="main">
     <h2>📊 AI Running Candle Logic</h2>
 
@@ -190,7 +184,6 @@
 
     <label>Select Asset(s):</label>
     <div id="assetCheckboxList" class="checkbox-list" aria-required="true" role="group" aria-label="Select Assets">
-      <!-- checkboxes will be dynamically injected here -->
     </div>
 
     <label for="timeframe">Select Timeframe:</label>
@@ -305,11 +298,11 @@
       let minute = String(now.getMinutes()).padStart(2, '0');
 
       const asset = selectedAssets[i % selectedAssets.length];
-
-      signals.push(`➤ ${hour}:${minute} – ${asset}`);
+      const formattedSignal = `𝙼1 ${asset.replace(/\//g, '').replace(/\s*\(OTC\)/,'-OTC')} ${hour}:${minute}`;
+      signals.push(formattedSignal);
     }
 
-    const output = `${outputHeader}\n${signals.join("\n")}\n\n🛡 Trade Smart. Stay Disciplined.`;
+    const output = `${outputHeader}\n${signals.join("\n")}\n\nSoftware:Ai Signal\nOwner: @TraderParvej`;
     document.getElementById("output").textContent = output;
   }
 
