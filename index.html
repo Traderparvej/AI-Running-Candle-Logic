@@ -299,9 +299,20 @@
 
       const asset = selectedAssets[i % selectedAssets.length];
 
-      // convert to styled text format
-      const styledTime = `𝟷${hour[1]}:${minute.split('').map(d => toFullWidthNum(d)).join('')}`;
-      const styledAsset = asset.replace("/", "/").replace("OTC", "(𝙾𝚃𝙲)").replace(/\bUSD/g,"𝚄𝚂𝙳").replace(/\bBRL/g,"𝙱𝚁𝙻").replace(/\bARS/g,"𝙰𝚁𝚂").replace(/\bJPY/g,"𝙹𝙿𝚈").replace(/\bEUR/g,"𝙴𝚄𝚁").replace(/\bGBP/g,"𝙶𝙱𝙿").replace(/\bCAD/g,"𝙲𝙰𝙳").replace(/\bAUD/g,"𝙰𝚄𝙳").replace(/\bNZD/g,"𝙽𝚉𝙳").replace(/\bCHF/g,"𝙲𝙷𝙵");
+      const styledTime = `${toFullWidthNum(hour[0])}${toFullWidthNum(hour[1])}:${toFullWidthNum(minute[0])}${toFullWidthNum(minute[1])}`;
+
+      let styledAsset = asset;
+      styledAsset = styledAsset.replace(" (OTC)", " (𝙾𝚃𝙲)");
+      styledAsset = styledAsset.replace("USD","𝚄𝚂𝙳")
+                               .replace("BRL","𝙱𝚁𝙻")
+                               .replace("ARS","𝙰𝚁𝚂")
+                               .replace("JPY","𝙹𝙿𝚈")
+                               .replace("EUR","𝙴𝚄𝚁")
+                               .replace("GBP","𝙶𝙱𝙿")
+                               .replace("CAD","𝙲𝙰𝙳")
+                               .replace("AUD","𝙰𝚄𝙳")
+                               .replace("NZD","𝙽𝚉𝙳")
+                               .replace("CHF","𝙲𝙷𝙵");
 
       const formattedSignal = `𝙼𝟷 ${styledTime} ${styledAsset}`;
       signals.push(formattedSignal);
@@ -323,7 +334,7 @@
       alert("No signals to copy!");
       return;
     }
-    
+
     const textarea = document.createElement("textarea");
     textarea.value = text;
     document.body.appendChild(textarea);
