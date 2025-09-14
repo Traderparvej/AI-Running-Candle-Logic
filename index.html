@@ -298,7 +298,7 @@
       let minute = String(now.getMinutes()).padStart(2, '0');
 
       const asset = selectedAssets[i % selectedAssets.length];
-      const formattedSignal = `𝙼1 ${asset.replace(/\//g, '').replace(/\s*\(OTC\)/,'-OTC')} ${hour}:${minute}`;
+      const formattedSignal = `𝙼𝟷 ${hour}:${minute} ${asset}`;
       signals.push(formattedSignal);
     }
 
