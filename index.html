@@ -215,23 +215,23 @@
   const CORRECT_PASSWORD = "@Ai4067";
 
   const realAssets = [
-    "EUR/JPY", "USD/JPY", "CAD/JPY", "EUR/USD", "GBP/USD", "AUD/JPY",
-    "GBP/CAD", "USD/CAD", "AUD/CAD", "AUD/USD", "GBP/AUD", "GBP/JPY",
-    "USD/CHF", "EUR/GBP"
+    "EUR/JPY","USD/JPY","CAD/JPY","EUR/USD","GBP/USD","AUD/JPY",
+    "GBP/CAD","USD/CAD","AUD/CAD","AUD/USD","GBP/AUD","GBP/JPY",
+    "USD/CHF","EUR/GBP"
   ];
 
   const otcAssets = [
-    "USD/ARS (OTC)", "USD/BDT (OTC)", "USD/EGP (OTC)", "USD/INR (OTC)", "USD/IDR (OTC)",
-    "USD/MXN (OTC)", "EUR/AUD (OTC)", "EUR/CHF (OTC)", "EUR/SGD (OTC)", "GBP/CHF (OTC)",
-    "NZD/CAD (OTC)", "AUD/NZD (OTC)", "CAD/CHF (OTC)", "EUR/NZD (OTC)", "USD/PHP (OTC)",
-    "GBP/NZD (OTC)", "USD/BRL (OTC)", "USD/ZAR (OTC)", "EUR/CAD (OTC)", "AUD/CHF (OTC)",
-    "CHF/JPY (OTC)", "NZD/CHF (OTC)", "USD/COP (OTC)", "USD/DZD (OTC)", "USD/NGN (OTC)",
-    "USD/TRY (OTC)", "USD/PKR (OTC)", "NZD/JPY (OTC)", "NZD/USD (OTC)"
+    "USD/ARS (OTC)","USD/BDT (OTC)","USD/EGP (OTC)","USD/INR (OTC)","USD/IDR (OTC)",
+    "USD/MXN (OTC)","EUR/AUD (OTC)","EUR/CHF (OTC)","EUR/SGD (OTC)","GBP/CHF (OTC)",
+    "NZD/CAD (OTC)","AUD/NZD (OTC)","CAD/CHF (OTC)","EUR/NZD (OTC)","USD/PHP (OTC)",
+    "GBP/NZD (OTC)","USD/BRL (OTC)","USD/ZAR (OTC)","EUR/CAD (OTC)","AUD/CHF (OTC)",
+    "CHF/JPY (OTC)","NZD/CHF (OTC)","USD/COP (OTC)","USD/DZD (OTC)","USD/NGN (OTC)",
+    "USD/TRY (OTC)","USD/PKR (OTC)","NZD/JPY (OTC)","NZD/USD (OTC)"
   ];
 
   function login() {
     const inputPass = document.getElementById("password").value.trim();
-    if(inputPass === CORRECT_PASSWORD) {
+    if(inputPass === CORRECT_PASSWORD){
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("mainPage").style.display = "block";
       updateAssets();
@@ -245,81 +245,24 @@
     const marketType = document.getElementById("marketType").value;
     const container = document.getElementById("assetCheckboxList");
     container.innerHTML = "";
-
     if (!marketType) {
       container.innerHTML = "<p style='color:#888; font-style:italic;'>Please select a market first.</p>";
       return;
     }
-
     const assets = marketType === "otc" ? otcAssets : realAssets;
-
     assets.forEach(asset => {
       const id = "asset-" + asset.replace(/[^\w]/g, '_');
       const label = document.createElement("label");
       label.htmlFor = id;
-
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = id;
       checkbox.name = "assets";
       checkbox.value = asset;
-
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(asset));
-
       container.appendChild(label);
     });
-  }
-
-  function generateSignals() {
-    const count = parseInt(document.getElementById("signalCount").value);
-    const checkedBoxes = document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
-    if (checkedBoxes.length === 0) {
-      alert("Please select at least one asset!");
-      return;
-    }
-    const selectedAssets = Array.from(checkedBoxes).map(cb => cb.value);
-    const chartType = document.getElementById("chartType").value;
-
-    const strategy = chartType === "ranging"
-      ? "🧠 Opposite Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, তার বিপরীতে ট্রেড নিন ❤️"
-      : "🧠 Running Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, সেই দিকেই ট্রেড নিন ❤️";
-
-    const outputHeader = `♧ 𝗔𝗜 𝗦𝗜𝗚𝗡𝗔𝗟 – 1 𝗠𝗶𝗻𝘂𝘁𝗲 𝗧𝗿𝗮𝗱𝗲\n✘ 𝟭 𝗦𝘁𝗲𝗽 𝗠𝗧𝗚 | ⏰ 𝗨𝗧𝗖 +𝟬𝟲:𝟬𝟬 ✘\n\n╔════ ≪•◦ ❈ ◦•≫ ════╗\n${strategy}\n╚════ ≪•◦ ❈ ◦•≫ ════╝\n`;
-
-    const now = new Date();
-    const signals = [];
-
-    for (let i = 0; i < count; i++) {
-      const randomGap = Math.floor(Math.random() * 4) + 2;
-      now.setMinutes(now.getMinutes() + randomGap);
-
-      let hour = String(now.getHours()).padStart(2, '0');
-      let minute = String(now.getMinutes()).padStart(2, '0');
-
-      const asset = selectedAssets[i % selectedAssets.length];
-
-      const styledTime = `${toFullWidthNum(hour[0])}${toFullWidthNum(hour[1])}:${toFullWidthNum(minute[0])}${toFullWidthNum(minute[1])}`;
-
-      let styledAsset = asset;
-      styledAsset = styledAsset.replace(" (OTC)", " (𝙾𝚃𝙲)");
-      styledAsset = styledAsset.replace("USD","𝚄𝚂𝙳")
-                               .replace("BRL","𝙱𝚁𝙻")
-                               .replace("ARS","𝙰𝚁𝚂")
-                               .replace("JPY","𝙹𝙿𝚈")
-                               .replace("EUR","𝙴𝚄𝚁")
-                               .replace("GBP","𝙶𝙱𝙿")
-                               .replace("CAD","𝙲𝙰𝙳")
-                               .replace("AUD","𝙰𝚄𝙳")
-                               .replace("NZD","𝙽𝚉𝙳")
-                               .replace("CHF","𝙲𝙷𝙵");
-
-      const formattedSignal = `𝙼𝟷 ${styledTime} ${styledAsset}`;
-      signals.push(formattedSignal);
-    }
-
-    const output = `${outputHeader}\n${signals.join("\n")}\n\nSoftware:Ai Signal\nOwner: @TraderParvej`;
-    document.getElementById("output").textContent = output;
   }
 
   function toFullWidthNum(digit) {
@@ -327,40 +270,81 @@
     return map[digit] || digit;
   }
 
-  function copySignals() {
-    const outputElem = document.getElementById("output");
-    const text = outputElem.textContent.trim();
-    if (!text) {
-      alert("No signals to copy!");
-      return;
+  function generateSignals() {
+    const count = parseInt(document.getElementById("signalCount").value);
+    const checkedBoxes = document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
+    if(checkedBoxes.length===0){alert("Please select at least one asset!");return;}
+    const selectedAssets = Array.from(checkedBoxes).map(cb => cb.value);
+    const chartType = document.getElementById("chartType").value;
+    const strategy = chartType === "ranging"
+      ? "🧠 Opposite Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, তার বিপরীতে ট্রেড নিন ❤️"
+      : "🧠 Running Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, সেই দিকেই ট্রেড নিন ❤️";
+    const outputHeader = `♧ 𝗔𝗜 𝗦𝗜𝗚𝗡𝗔𝗟 – 1 𝗠𝗶𝗻𝘂𝘁𝗲 𝗧𝗿𝗮𝗱𝗲\n✘ 𝟭 𝗦𝘁𝗲𝗽 𝗠𝗧𝗚 | ⏰ 𝗨𝗧𝗖 +𝟬𝟲:𝟬𝟬 ✘\n\n╔════ ≪•◦ ❈ ◦•≫ ════╗\n${strategy}\n╚════ ≪•◦ ❈ ◦•≫ ════╝\n`;
+    const now = new Date();
+    const signals = [];
+    for(let i=0;i<count;i++){
+      const randomGap=Math.floor(Math.random()*4)+2;
+      now.setMinutes(now.getMinutes()+randomGap);
+      let hour=String(now.getHours()).padStart(2,'0');
+      let minute=String(now.getMinutes()).padStart(2,'0');
+      const asset=selectedAssets[i % selectedAssets.length];
+      const styledTime=`${toFullWidthNum(hour[0])}${toFullWidthNum(hour[1])}:${toFullWidthNum(minute[0])}${toFullWidthNum(minute[1])}`;
+      let styledAsset=asset.replace(" (OTC)"," (𝙾𝚃𝙲)")
+                            .replace("USD","𝚄𝚂𝙳")
+                            .replace("BRL","𝙱𝚁𝙻")
+                            .replace("ARS","𝙰𝚁𝚂")
+                            .replace("JPY","𝙹𝙿𝚈")
+                            .replace("EUR","𝙴𝚄𝚁")
+                            .replace("GBP","𝙶𝙱𝙿")
+                            .replace("CAD","𝙲𝙰𝙳")
+                            .replace("AUD","𝙰𝚄𝙳")
+                            .replace("NZD","𝙽𝚉𝙳")
+                            .replace("CHF","𝙲𝙷𝙵")
+                            .replace("BDT","𝙱𝙳𝚃")
+                            .replace("EGP","𝙴𝙶𝙿")
+                            .replace("INR","𝙸𝙽𝚁")
+                            .replace("IDR","𝙸𝙳𝚁")
+                            .replace("MXN","𝙼𝚇𝙽")
+                            .replace("AUD","𝙰𝚄𝙳")
+                            .replace("NZD","𝙽𝚉𝙳")
+                            .replace("PHP","𝙿𝙷𝙿")
+                            .replace("ZAR","𝚉𝙰𝚁")
+                            .replace("COP","𝙲𝙾𝙿")
+                            .replace("DZD","𝙳𝚉𝙳")
+                            .replace("NGN","𝙽𝙶𝙽")
+                            .replace("TRY","𝚃𝚁𝚈")
+                            .replace("PKR","𝙿𝙺𝚁");
+      const formattedSignal=`𝙼𝟷 ${styledTime} ${styledAsset}`;
+      signals.push(formattedSignal);
     }
+    const output=`${outputHeader}\n${signals.join("\n")}\n\nSoftware:Ai Signal\nOwner: @TraderParvej`;
+    document.getElementById("output").textContent=output;
+  }
 
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
+  function copySignals(){
+    const outputElem=document.getElementById("output");
+    const text=outputElem.textContent.trim();
+    if(!text){alert("No signals to copy!");return;}
+    const textarea=document.createElement("textarea");
+    textarea.value=text;
     document.body.appendChild(textarea);
     textarea.select();
-    textarea.setSelectionRange(0, 99999);
-
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        alert("Signals copied to clipboard!");
-      } else {
-        alert("Failed to copy. Please copy manually.");
-      }
-    } catch (err) {
-      alert("Error copying: " + err);
-    }
+    textarea.setSelectionRange(0,99999);
+    try{
+      const successful=document.execCommand('copy');
+      if(successful){alert("Signals copied to clipboard!");}
+      else{alert("Failed to copy. Please copy manually.");}
+    }catch(err){alert("Error copying: "+err);}
     document.body.removeChild(textarea);
   }
 
-  function resetForm() {
-    document.getElementById("marketType").value = "";
+  function resetForm(){
+    document.getElementById("marketType").value="";
     updateAssets();
-    document.getElementById("timeframe").value = "1";
-    document.getElementById("signalCount").value = 5;
-    document.getElementById("chartType").value = "ranging";
-    document.getElementById("output").textContent = "";
+    document.getElementById("timeframe").value="1";
+    document.getElementById("signalCount").value=5;
+    document.getElementById("chartType").value="ranging";
+    document.getElementById("output").textContent="";
   }
 </script>
 
