@@ -159,6 +159,15 @@
     a.contact-link:hover {
       text-decoration: underline;
     }
+
+    #nextSignalBtn {
+      background-color: #004d40;
+      margin-top: 1rem;
+    }
+    #nextSignalBtn:hover {
+      background-color: #00796b;
+    }
+
   </style>
 </head>
 <body>
@@ -209,6 +218,7 @@
     </div>
 
     <div id="output" aria-label="Signal output will appear here"></div>
+    <button id="nextSignalBtn" style="display:none;">Next Signal ➡</button>
   </div>
 
 <script>
@@ -270,18 +280,23 @@
     return map[digit] || digit;
   }
 
+  let generatedSignals = [];
+  let currentSignalIndex = 0;
+
   function generateSignals() {
     const count = parseInt(document.getElementById("signalCount").value);
     const checkedBoxes = document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
-    if(checkedBoxes.length===0){alert("Please select at least one asset!");return;}
+    if(checkedBoxes.length===0){alert("Please select at least one asset!"); return;}
     const selectedAssets = Array.from(checkedBoxes).map(cb => cb.value);
     const chartType = document.getElementById("chartType").value;
     const strategy = chartType === "ranging"
-      ? "🧠 Opposite Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, তার বিপরীতে ট্রেড নিন ❤️"
-      : "🧠 Running Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, সেই দিকেই ট্রেড নিন ❤️";
-    const outputHeader = `♧ 𝗔𝗜 𝗦𝗜𝗚𝗡𝗔𝗟 – 1 𝗠𝗶𝗻𝘂𝘁𝗲 𝗧𝗿𝗮𝗱𝗲\n✘ 𝟭 𝗦𝘁𝗲𝗽 𝗠𝗧𝗚 | ⏰ 𝗨𝗧𝗖 +𝟬𝟲:𝟬𝟬 ✘\n\n╔════ ≪•◦ ❈ ◦•≫ ════╗\n${strategy}\n╚════ ≪•◦ ❈ ◦•≫ ════╝\n`;
+      ? "🧠 Opposite Candle Strategy\n➡ আগের ক্যান্ডেলের বিপরীতে ট্রেড নিন ❤️"
+      : "🧠 Running Candle Strategy\n➡ আগের ক্যান্ডেলের দিকেই ট্রেড নিন ❤️";
+
+    const outputHeader = `✦━━━━━━━━━━✦\n   🔮 AI SIGNAL\n✦━━━━━━━━━━✦\n\n${strategy}\n`;
+
     const now = new Date();
-    const signals = [];
+    generatedSignals = [];
     for(let i=0;i<count;i++){
       const randomGap=Math.floor(Math.random()*4)+2;
       now.setMinutes(now.getMinutes()+randomGap);
@@ -305,8 +320,6 @@
                             .replace("INR","𝙸𝙽𝚁")
                             .replace("IDR","𝙸𝙳𝚁")
                             .replace("MXN","𝙼𝚇𝙽")
-                            .replace("AUD","𝙰𝚄𝙳")
-                            .replace("NZD","𝙽𝚉𝙳")
                             .replace("PHP","𝙿𝙷𝙿")
                             .replace("ZAR","𝚉𝙰𝚁")
                             .replace("COP","𝙲𝙾𝙿")
@@ -314,12 +327,25 @@
                             .replace("NGN","𝙽𝙶𝙽")
                             .replace("TRY","𝚃𝚁𝚈")
                             .replace("PKR","𝙿𝙺𝚁");
-      const formattedSignal=`𝙼𝟷 ${styledTime} ${styledAsset}`;
-      signals.push(formattedSignal);
+      const formattedSignal=`📊 Market : ${styledAsset}\n⏰ Time : ${styledTime}\n🧭 Expiry : M1\n⚡ MTG : 1\n`;
+      generatedSignals.push(outputHeader + formattedSignal);
     }
-    const output=`${outputHeader}\n${signals.join("\n")}\n\nSoftware:Ai Signal\nOwner: @TraderParvej`;
-    document.getElementById("output").textContent=output;
+
+    currentSignalIndex = 0;
+    showNextSignal();
+    document.getElementById("nextSignalBtn").style.display = "block";
   }
+
+  function showNextSignal(){
+    if(generatedSignals.length === 0) return;
+    document.getElementById("output").textContent = generatedSignals[currentSignalIndex] + "\nSoftware: Ai Signal\nOwner: @TraderParvej";
+    currentSignalIndex++;
+    if(currentSignalIndex >= generatedSignals.length){
+      currentSignalIndex = 0; // wrap around
+    }
+  }
+
+  document.getElementById("nextSignalBtn").addEventListener("click", showNextSignal);
 
   function copySignals(){
     const outputElem=document.getElementById("output");
@@ -345,6 +371,9 @@
     document.getElementById("signalCount").value=5;
     document.getElementById("chartType").value="ranging";
     document.getElementById("output").textContent="";
+    document.getElementById("nextSignalBtn").style.display = "none";
+    generatedSignals = [];
+    currentSignalIndex = 0;
   }
 </script>
 
