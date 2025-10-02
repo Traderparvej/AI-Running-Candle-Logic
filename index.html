@@ -25,7 +25,6 @@
       max-width: 480px;
       width: 100%;
       padding: 2rem 2.5rem;
-      position: relative;
     }
 
     h2 {
@@ -120,7 +119,6 @@
       border: 2px solid #00796b;
       letter-spacing: 0.03em;
       overflow-wrap: break-word;
-      position: relative;
     }
 
     #mainPage {
@@ -161,211 +159,195 @@
     a.contact-link:hover {
       text-decoration: underline;
     }
-
-    #nextSignalBtn {
-      background-color: #004d40;
-      margin-top: 1rem;
-    }
-    #nextSignalBtn:hover {
-      background-color: #00796b;
-    }
-
-    /* Loader styles */
-    #loader {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255,255,255,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #00796b;
-      display: none;
-      flex-direction: column;
-    }
-
-    .spinner {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #00796b;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 0.8rem;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
   </style>
 </head>
 <body>
 
-<div class="container" id="loginPage" role="main">
-  <h2>Login Required</h2>
-  <input type="password" id="password" placeholder="Enter password" aria-label="Password" />
-  <button onclick="login()">Login</button>
-  <p style="margin-top:1rem; font-size:0.9rem; color:#004d40; text-align:center;">
-    For password contact: <a href="https://t.me/QxParvej" target="_blank" class="contact-link">@QXParvej</a>
-  </p>
-</div>
-
-<div class="container" id="mainPage" aria-live="polite" aria-label="AI Signal Generator Interface" role="main">
-  <h2>📊 AI Running Candle Logic</h2>
-
-  <label for="marketType">Select Market Type:</label>
-  <select id="marketType" onchange="updateAssets()" aria-required="true">
-    <option value="">-- Select Market --</option>
-    <option value="real">Real Market</option>
-    <option value="otc">OTC</option>
-  </select>
-
-  <label>Select Asset(s):</label>
-  <div id="assetCheckboxList" class="checkbox-list" aria-required="true" role="group" aria-label="Select Assets"></div>
-
-  <label for="timeframe">Select Timeframe:</label>
-  <select id="timeframe">
-    <option value="1">1 Minute</option>
-    <option value="3">3 Minute</option>
-    <option value="5">5 Minute</option>
-  </select>
-
-  <label for="signalCount">Number of Signals:</label>
-  <input type="number" id="signalCount" value="5" min="1" max="20" aria-required="true" />
-
-  <label for="chartType">Chart Type:</label>
-  <select id="chartType" aria-required="true">
-    <option value="ranging">Ranging Market</option>
-    <option value="trending">Trending Market</option>
-  </select>
-
-  <div class="button-row">
-    <button onclick="generateSignals()">Generate Signals</button>
-    <button onclick="copySignals()">Copy All</button>
-    <button onclick="resetForm()">Reset</button>
+  <div class="container" id="loginPage" role="main">
+    <h2>Login Required</h2>
+    <input type="password" id="password" placeholder="Enter password" aria-label="Password" />
+    <button onclick="login()">Login</button>
+    <p style="margin-top:1rem; font-size:0.9rem; color:#004d40; text-align:center;">
+      For password contact: <a href="https://t.me/QxParvej" target="_blank" class="contact-link">@QXParvej</a>
+    </p>
   </div>
 
-  <div id="output" aria-label="Signal output will appear here"></div>
-  <button id="nextSignalBtn" style="display:none;">Next Signal ➡</button>
+  <div class="container" id="mainPage" aria-live="polite" aria-label="AI Signal Generator Interface" role="main">
+    <h2>📊 AI Running Candle Logic</h2>
 
-  <!-- Loader -->
-  <div id="loader">
-    <div class="spinner"></div>
-    <div>Loading next signal...</div>
+    <label for="marketType">Select Market Type:</label>
+    <select id="marketType" onchange="updateAssets()" aria-required="true">
+      <option value="">-- Select Market --</option>
+      <option value="real">Real Market</option>
+      <option value="otc">OTC</option>
+    </select>
+
+    <label>Select Asset(s):</label>
+    <div id="assetCheckboxList" class="checkbox-list" aria-required="true" role="group" aria-label="Select Assets">
+    </div>
+
+    <label for="timeframe">Select Timeframe:</label>
+    <select id="timeframe">
+      <option value="1">1 Minute</option>
+      <option value="3">3 Minute</option>
+      <option value="5">5 Minute</option>
+    </select>
+
+    <label for="signalCount">Number of Signals:</label>
+    <input type="number" id="signalCount" value="5" min="1" max="20" aria-required="true" />
+
+    <label for="chartType">Chart Type:</label>
+    <select id="chartType" aria-required="true">
+      <option value="ranging">Ranging Market</option>
+      <option value="trending">Trending Market</option>
+    </select>
+
+    <div class="button-row">
+      <button onclick="generateSignals()">Generate Signals</button>
+      <button onclick="copySignals()">Copy All</button>
+      <button onclick="resetForm()">Reset</button>
+    </div>
+
+    <div id="output" aria-label="Signal output will appear here"></div>
   </div>
-
-</div>
 
 <script>
-const CORRECT_PASSWORD = "@Ai4067";
+  const CORRECT_PASSWORD = "@Ai4067";
 
-const realAssets = ["EUR/JPY","USD/JPY","CAD/JPY","EUR/USD","GBP/USD","AUD/JPY",
-"GBP/CAD","USD/CAD","AUD/CAD","AUD/USD","GBP/AUD","GBP/JPY","USD/CHF","EUR/GBP"];
+  const realAssets = [
+    "EUR/JPY","USD/JPY","CAD/JPY","EUR/USD","GBP/USD","AUD/JPY",
+    "GBP/CAD","USD/CAD","AUD/CAD","AUD/USD","GBP/AUD","GBP/JPY",
+    "USD/CHF","EUR/GBP"
+  ];
 
-const otcAssets = ["USD/ARS (OTC)","USD/BDT (OTC)","USD/EGP (OTC)","USD/INR (OTC)","USD/IDR (OTC)",
-"USD/MXN (OTC)","EUR/AUD (OTC)","EUR/CHF (OTC)","EUR/SGD (OTC)","GBP/CHF (OTC)",
-"NZD/CAD (OTC)","AUD/NZD (OTC)","CAD/CHF (OTC)","EUR/NZD (OTC)","USD/PHP (OTC)",
-"GBP/NZD (OTC)","USD/BRL (OTC)","USD/ZAR (OTC)","EUR/CAD (OTC)","AUD/CHF (OTC)",
-"CHF/JPY (OTC)","NZD/CHF (OTC)","USD/COP (OTC)","USD/DZD (OTC)","USD/NGN (OTC)",
-"USD/TRY (OTC)","USD/PKR (OTC)","NZD/JPY (OTC)","NZD/USD (OTC)"];
+  const otcAssets = [
+    "USD/ARS (OTC)","USD/BDT (OTC)","USD/EGP (OTC)","USD/INR (OTC)","USD/IDR (OTC)",
+    "USD/MXN (OTC)","EUR/AUD (OTC)","EUR/CHF (OTC)","EUR/SGD (OTC)","GBP/CHF (OTC)",
+    "NZD/CAD (OTC)","AUD/NZD (OTC)","CAD/CHF (OTC)","EUR/NZD (OTC)","USD/PHP (OTC)",
+    "GBP/NZD (OTC)","USD/BRL (OTC)","USD/ZAR (OTC)","EUR/CAD (OTC)","AUD/CHF (OTC)",
+    "CHF/JPY (OTC)","NZD/CHF (OTC)","USD/COP (OTC)","USD/DZD (OTC)","USD/NGN (OTC)",
+    "USD/TRY (OTC)","USD/PKR (OTC)","NZD/JPY (OTC)","NZD/USD (OTC)"
+  ];
 
-function login() {
-  const inputPass = document.getElementById("password").value.trim();
-  if(inputPass === CORRECT_PASSWORD){
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("mainPage").style.display = "block";
+  function login() {
+    const inputPass = document.getElementById("password").value.trim();
+    if(inputPass === CORRECT_PASSWORD){
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("mainPage").style.display = "block";
+      updateAssets();
+      resetForm();
+    } else {
+      alert("Incorrect password!");
+    }
+  }
+
+  function updateAssets() {
+    const marketType = document.getElementById("marketType").value;
+    const container = document.getElementById("assetCheckboxList");
+    container.innerHTML = "";
+    if (!marketType) {
+      container.innerHTML = "<p style='color:#888; font-style:italic;'>Please select a market first.</p>";
+      return;
+    }
+    const assets = marketType === "otc" ? otcAssets : realAssets;
+    assets.forEach(asset => {
+      const id = "asset-" + asset.replace(/[^\w]/g, '_');
+      const label = document.createElement("label");
+      label.htmlFor = id;
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = id;
+      checkbox.name = "assets";
+      checkbox.value = asset;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(asset));
+      container.appendChild(label);
+    });
+  }
+
+  function toFullWidthNum(digit) {
+    const map = { "0": "𝟶","1": "𝟷","2": "𝟸","3": "𝟹","4": "𝟺","5": "𝟻","6": "𝟼","7": "𝟽","8": "𝟾","9": "𝟿" };
+    return map[digit] || digit;
+  }
+
+  function generateSignals() {
+    const count = parseInt(document.getElementById("signalCount").value);
+    const checkedBoxes = document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
+    if(checkedBoxes.length===0){alert("Please select at least one asset!");return;}
+    const selectedAssets = Array.from(checkedBoxes).map(cb => cb.value);
+    const chartType = document.getElementById("chartType").value;
+    const strategy = chartType === "ranging"
+      ? "🧠 Opposite Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, তার বিপরীতে ট্রেড নিন ❤️"
+      : "🧠 Running Candle Strategy:\nযে সময় উল্লেখ আছে তার আগের ক্যান্ডেল যা হবে, সেই দিকেই ট্রেড নিন ❤️";
+    const outputHeader = `♧ 𝗔𝗜 𝗦𝗜𝗚𝗡𝗔𝗟 – 1 𝗠𝗶𝗻𝘂𝘁𝗲 𝗧𝗿𝗮𝗱𝗲\n✘ 𝟭 𝗦𝘁𝗲𝗽 𝗠𝗧𝗚 | ⏰ 𝗨𝗧𝗖 +𝟬𝟲:𝟬𝟬 ✘\n\n╔════ ≪•◦ ❈ ◦•≫ ════╗\n${strategy}\n╚════ ≪•◦ ❈ ◦•≫ ════╝\n`;
+    const now = new Date();
+    const signals = [];
+    for(let i=0;i<count;i++){
+      const randomGap=Math.floor(Math.random()*4)+2;
+      now.setMinutes(now.getMinutes()+randomGap);
+      let hour=String(now.getHours()).padStart(2,'0');
+      let minute=String(now.getMinutes()).padStart(2,'0');
+      const asset=selectedAssets[i % selectedAssets.length];
+      const styledTime=`${toFullWidthNum(hour[0])}${toFullWidthNum(hour[1])}:${toFullWidthNum(minute[0])}${toFullWidthNum(minute[1])}`;
+      let styledAsset=asset.replace(" (OTC)"," (𝙾𝚃𝙲)")
+                            .replace("USD","𝚄𝚂𝙳")
+                            .replace("BRL","𝙱𝚁𝙻")
+                            .replace("ARS","𝙰𝚁𝚂")
+                            .replace("JPY","𝙹𝙿𝚈")
+                            .replace("EUR","𝙴𝚄𝚁")
+                            .replace("GBP","𝙶𝙱𝙿")
+                            .replace("CAD","𝙲𝙰𝙳")
+                            .replace("AUD","𝙰𝚄𝙳")
+                            .replace("NZD","𝙽𝚉𝙳")
+                            .replace("CHF","𝙲𝙷𝙵")
+                            .replace("BDT","𝙱𝙳𝚃")
+                            .replace("EGP","𝙴𝙶𝙿")
+                            .replace("INR","𝙸𝙽𝚁")
+                            .replace("IDR","𝙸𝙳𝚁")
+                            .replace("MXN","𝙼𝚇𝙽")
+                            .replace("AUD","𝙰𝚄𝙳")
+                            .replace("NZD","𝙽𝚉𝙳")
+                            .replace("PHP","𝙿𝙷𝙿")
+                            .replace("ZAR","𝚉𝙰𝚁")
+                            .replace("COP","𝙲𝙾𝙿")
+                            .replace("DZD","𝙳𝚉𝙳")
+                            .replace("NGN","𝙽𝙶𝙽")
+                            .replace("TRY","𝚃𝚁𝚈")
+                            .replace("PKR","𝙿𝙺𝚁");
+      const formattedSignal=`𝙼𝟷 ${styledTime} ${styledAsset}`;
+      signals.push(formattedSignal);
+    }
+    const output=`${outputHeader}\n${signals.join("\n")}\n\nSoftware:Ai Signal\nOwner: @TraderParvej`;
+    document.getElementById("output").textContent=output;
+  }
+
+  function copySignals(){
+    const outputElem=document.getElementById("output");
+    const text=outputElem.textContent.trim();
+    if(!text){alert("No signals to copy!");return;}
+    const textarea=document.createElement("textarea");
+    textarea.value=text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0,99999);
+    try{
+      const successful=document.execCommand('copy');
+      if(successful){alert("Signals copied to clipboard!");}
+      else{alert("Failed to copy. Please copy manually.");}
+    }catch(err){alert("Error copying: "+err);}
+    document.body.removeChild(textarea);
+  }
+
+  function resetForm(){
+    document.getElementById("marketType").value="";
     updateAssets();
-    resetForm();
-  } else { alert("Incorrect password!"); }
-}
-
-function updateAssets() {
-  const marketType = document.getElementById("marketType").value;
-  const container = document.getElementById("assetCheckboxList");
-  container.innerHTML = "";
-  if (!marketType) { container.innerHTML = "<p style='color:#888; font-style:italic;'>Please select a market first.</p>"; return;}
-  const assets = marketType==="otc"?otcAssets:realAssets;
-  assets.forEach(asset => {
-    const id = "asset-"+asset.replace(/[^\w]/g,'_');
-    const label = document.createElement("label");
-    label.htmlFor=id;
-    const checkbox=document.createElement("input");
-    checkbox.type="checkbox"; checkbox.id=id; checkbox.name="assets"; checkbox.value=asset;
-    label.appendChild(checkbox); label.appendChild(document.createTextNode(asset));
-    container.appendChild(label);
-  });
-}
-
-function toFullWidthNum(digit){ const map={"0":"0","1":"1","2":"2","3":"3","4":"4","5":"5","6":"6","7":"7","8":"8","9":"9"}; return map[digit]||digit;}
-
-let generatedSignals=[]; let currentSignalIndex=0;
-
-function generateSignals(){
-  const count=parseInt(document.getElementById("signalCount").value);
-  const checkedBoxes=document.querySelectorAll("#assetCheckboxList input[type='checkbox']:checked");
-  if(checkedBoxes.length===0){alert("Please select at least one asset!"); return;}
-  const selectedAssets=Array.from(checkedBoxes).map(cb=>cb.value);
-  const chartType=document.getElementById("chartType").value;
-  const strategy = chartType==="ranging" ? 
-    "🧠 Opposite Candle Strategy\n➡ আগের ক্যান্ডেলের বিপরীতে ট্রেড নিন ❤️" : 
-    "🧠 Running Candle Strategy\n➡ আগের ক্যান্ডেলের দিকেই ট্রেড নিন ❤️";
-  const now=new Date();
-  generatedSignals=[];
-  selectedAssets.forEach((asset,i)=>{
-    const randomGap=Math.floor(Math.random()*4)+2;
-    now.setMinutes(now.getMinutes()+randomGap);
-    let hour=String(now.getHours()).padStart(2,'0');
-    let minute=String(now.getMinutes()).padStart(2,'0');
-    const styledTime=`${hour}:${minute}`;
-    const formattedSignal=`✦━━━━━━━━━━✦\n   🔮 AI SIGNAL\n✦━━━━━━━━━━✦\n\n📊 Market : ${asset}\n⏰ Time   : ${styledTime}\n🧭 Expiry : M1\n⚡ MTG    : 1\n\n${strategy}\n`;
-    generatedSignals.push(formattedSignal);
-  });
-  currentSignalIndex=0;
-  showNextSignal();
-  document.getElementById("nextSignalBtn").style.display="block";
-}
-
-function showNextSignal(){
-  if(generatedSignals.length===0) return;
-  const loader=document.getElementById("loader");
-  const outputElem=document.getElementById("output");
-  loader.style.display="flex"; outputElem.style.opacity="0.5";
-  setTimeout(()=>{
-    loader.style.display="none"; outputElem.style.opacity="1";
-    outputElem.textContent=generatedSignals[currentSignalIndex] + "\nSoftware: Ai Signal\nOwner: @TraderParvej";
-    currentSignalIndex++; if(currentSignalIndex>=generatedSignals.length){currentSignalIndex=0;}
-  },4000);
-}
-
-document.getElementById("nextSignalBtn").addEventListener("click", showNextSignal);
-
-function copySignals(){
-  const outputElem=document.getElementById("output");
-  const text=outputElem.textContent.trim();
-  if(!text){alert("No signals to copy!"); return;}
-  const textarea=document.createElement("textarea"); textarea.value=text; document.body.appendChild(textarea);
-  textarea.select(); textarea.setSelectionRange(0,99999);
-  try{document.execCommand('copy'); alert("Signals copied to clipboard!");}catch(err){alert("Error copying: "+err);}
-  document.body.removeChild(textarea);
-}
-
-function resetForm(){
-  document.getElementById("marketType").value="";
-  updateAssets();
-  document.getElementById("timeframe").value="1";
-  document.getElementById("signalCount").value=5;
-  document.getElementById("chartType").value="ranging";
-  document.getElementById("output").textContent="";
-  document.getElementById("nextSignalBtn").style.display="none";
-  generatedSignals=[]; currentSignalIndex=0;
-}
+    document.getElementById("timeframe").value="1";
+    document.getElementById("signalCount").value=5;
+    document.getElementById("chartType").value="ranging";
+    document.getElementById("output").textContent="";
+  }
 </script>
+
 </body>
 </html>
+
