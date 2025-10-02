@@ -25,6 +25,7 @@
       max-width: 480px;
       width: 100%;
       padding: 2rem 2.5rem;
+      position: relative;
     }
 
     h2 {
@@ -119,6 +120,7 @@
       border: 2px solid #00796b;
       letter-spacing: 0.03em;
       overflow-wrap: break-word;
+      position: relative;
     }
 
     #mainPage {
@@ -166,6 +168,40 @@
     }
     #nextSignalBtn:hover {
       background-color: #00796b;
+    }
+
+    /* Loader styles */
+    #loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #00796b;
+      display: none;
+      flex-direction: column;
+    }
+
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #00796b;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 0.8rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
   </style>
@@ -219,6 +255,13 @@
 
     <div id="output" aria-label="Signal output will appear here"></div>
     <button id="nextSignalBtn" style="display:none;">Next Signal ➡</button>
+
+    <!-- Loader -->
+    <div id="loader">
+      <div class="spinner"></div>
+      <div>Loading next signal...</div>
+    </div>
+
   </div>
 
 <script>
@@ -338,11 +381,26 @@
 
   function showNextSignal(){
     if(generatedSignals.length === 0) return;
-    document.getElementById("output").textContent = generatedSignals[currentSignalIndex] + "\nSoftware: Ai Signal\nOwner: @TraderParvej";
-    currentSignalIndex++;
-    if(currentSignalIndex >= generatedSignals.length){
-      currentSignalIndex = 0; // wrap around
-    }
+    const loader = document.getElementById("loader");
+    const outputElem = document.getElementById("output");
+
+    // Show loader
+    loader.style.display = "flex";
+    outputElem.style.opacity = "0.5";
+
+    setTimeout(() => {
+      // Hide loader
+      loader.style.display = "none";
+      outputElem.style.opacity = "1";
+
+      // Show signal
+      outputElem.textContent = generatedSignals[currentSignalIndex] + "\nSoftware: Ai Signal\nOwner: @TraderParvej";
+
+      currentSignalIndex++;
+      if(currentSignalIndex >= generatedSignals.length){
+        currentSignalIndex = 0; // wrap around
+      }
+    }, 4000); // 4 seconds
   }
 
   document.getElementById("nextSignalBtn").addEventListener("click", showNextSignal);
